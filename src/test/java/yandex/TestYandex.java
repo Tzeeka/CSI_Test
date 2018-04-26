@@ -2,10 +2,16 @@ package yandex;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import  org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class TestYandex extends BaseTest {
+
+    String mailTheme = "Тест письмо №1";
+    String mailSender = "aviktorov174@gmail.com";
+    String mailText = "Это письмо №1";
+
     String url = "https://www.yandex.ru/";
     String login = "csitest1@yandex.ru";
     String password = "v6R2Xi*zk";
@@ -13,19 +19,16 @@ public class TestYandex extends BaseTest {
     String loginField = "input.passport-Input-Controller";
     String passwordField = "passwd";
     String enterButton = "span.passport-Button-Text";
-
     String searchField = "input.textinput__control";
     String searchButton = "button.button2.button2_view_classic.button2_size_m.button2_theme_normal.button2_pin_brick-round.mail-SearchContainer-Button";
     String mailLink = "span.mail-MessageSnippet-FromText";
-    String mailTheme = "Тест письмо №1";
-    String mailSender = "aviktorov174@gmail.com";
-    String mailText = "Это письмо №1";
     String getMailTheme, getMailSender, getMailText;
     String themeSelector = "div.mail-Message-Toolbar-Subject.mail-Message-Toolbar-Subject_message.js-toolbar-subject.js-subject-content.js-invalid-drag-target";
     String senderSelector = "span.mail-Message-Sender-Email.mail-ui-HoverLink-Content";
     String textSelector = "div.mail-Message-Body-Content";
     String username = "div.mail-User-Name";
     String quit = "a.b-mail-dropdown__item__content.js-user-dropdown-item";
+    String year = "a.b-mail-paginator__link.b-link_w.item-2018.ns-action";
 
     @Test
     public void LoginTest() {
@@ -40,8 +43,10 @@ public class TestYandex extends BaseTest {
 
     @Test
     public void findMail() {
-        driver.findElement(By.cssSelector(searchField)).sendKeys("aviktorov174@gmail.com");
+        WebElement thatYear = driver.findElement(By.cssSelector(year));
+        driver.findElement(By.cssSelector(searchField)).sendKeys(mailTheme);
         driver.findElement(By.cssSelector(searchButton)).click();
+        wait.until(ExpectedConditions.stalenessOf(thatYear));
         WebElement mail =  driver.findElement(By.cssSelector(mailLink));
         actions.moveToElement(mail).click().build().perform();
     }
